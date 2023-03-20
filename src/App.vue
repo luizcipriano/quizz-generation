@@ -4,7 +4,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <div>
-    <h1>Generation Quiz</h1>
+    <h1>{{ quizTitle }}</h1>
     <div v-if="!quizComplete">
       <h2>{{ currentQuestion + 1 }}. {{ quizData[currentQuestion].question }}</h2>
       <ul>
@@ -15,12 +15,13 @@ import HelloWorld from './components/HelloWorld.vue'
           </label>
         </li>
       </ul>
-      <button :disabled="selectedOption === null" @click="checkAnswer">Next</button>
+      <button @click="checkAnswer" :disabled="selectedOption === null">{{ nextButton }}</button>
     </div>
     <div v-else>
       <h2>{{ quizResult }}</h2>
-      <button   @click="restartQuiz">Restart Quiz</button>
+      <button @click="restartQuiz">{{ restartButton }}</button>
     </div>
+    <button @click="changeLanguage">{{ languageButton }}</button>
   </div>
 </template>
 
@@ -55,11 +56,15 @@ export default {
           answer: "Text"
         }
       ],
+      quizTitle: "Generation Quiz",
       currentQuestion: 0,
       selectedOption: null,
       correctAnswers: 0,
       quizComplete: false,
-      quizResult: null
+      quizResult: null,
+      nextButton: "Next",
+      restartButton: "Restart Quiz",
+      languageButton: "Change Language"
     };
   },
   methods: {
@@ -87,25 +92,32 @@ export default {
       this.correctAnswers = 0;
       this.quizComplete = false;
       this.quizResult = null;
-    }
+    },
+    changeLanguage() {
+      if (this.quizTitle === "Generation Quiz") {
+        this.quizTitle = "Quiz da Geração";
+        this.nextButton = "Próxima";
+        this.restartButton = "Reiniciar Quiz";
+        this.languageButton = "Mudar Idioma";
+        this.quizData[0].question = "Qual plataforma vc usa mais ?";
+        this.quizData[1].question = "Qual dessas series vc prefere mais ?";
+        this.quizData[2].question = "Qual seu jeito favorito de escutar musica ?";
+        this.quizData[3].question = "Qual seu jeito favorito de fazer compras";
+        this.quizData[4].question = "Como vc se comunica com seus amigos?";
+
+
+      } else {
+        this.quizTitle = "Generation Quiz";
+        this.nextButton = "Next";
+        this.restartButton = "Restart Quiz";
+        this.languageButton = "Change Language";
+        this.quizData[0].question = "Which social media platform do you use the most ?";
+        this.quizData[1].question = "Which of these TV shows do you enjoy the most ?";
+        this.quizData[2].question = "What is your favorite way to listen to music ?";
+        this.quizData[3].question = "What is your favorite way to shop ?";
+        this.quizData[4].question = "What is your favorite way to communicate with friends ?";
+
+      }
+    }}
   }
-};
-</script>
-
-
-
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+  </script>
